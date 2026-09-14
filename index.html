@@ -239,20 +239,53 @@ var TOKEN = localStorage.getItem('st_token') || '';
 var ME = null, PERMS = null;
 document.getElementById('year').textContent = new Date().getFullYear();
 
-/* ============ INIT ============ */
+/* ============ INIT (smart: cache-first + warm-up) ============ */
+
+// Cache helpers — data ko phone me save/nikaalte hain
+function cacheSet(key, val){ try{ localStorage.setItem('st_cache_'+key, JSON.stringify(val)); }catch(e){} }
+function cacheGet(key){ try{ var v=localStorage.getItem('st_cache_'+key); return v?JSON.parse(v):null; }catch(e){ return null; } }
+
 function loadApp(){
   TOKEN = localStorage.getItem('st_token') || '';
+
   if (TOKEN){
-    api('getMyData', { token: TOKEN }, onMyData);
+    // Logged-in: pehle cache se TURANT dikhao (agar hai), phir fresh laao
+    var cached = cacheGet('mydata');
+    if (cached && cached.ok){ onMyData(cached, true); }   // true = cache se
+    api('getMyData', { token: TOKEN }, function(d){
+      if (d && d.ok){ cacheSet('mydata', d); onMyData(d); }
+      else if (d && d.expired){ localStorage.removeItem('st_token'); TOKEN=''; cacheSet('mydata',null); loadApp(); }
+      else if (!cached){ onFail(d); }   // fresh fail aur cache bhi nahi -> error
+    });
   } else {
-    api('getPublicData', {}, onPublic);
+    // Guest: pehle cache se turant, phir fresh
+    var cp = cacheGet('public');
+    if (cp && cp.ok){ onPublic(cp, true); }
+    api('getPublicData', {}, function(d){
+      if (d && d.ok){ cacheSet('public', d); onPublic(d); }
+      else if (!cp){ onFail(d); }
+    });
   }
+
+  // Warm-up: server ko "jaga" do taaki agli call (login/admin) tez ho
+  warmUp();
 }
+
+var _warmed = false;
+function warmUp(){
+  if (_warmed) return; _warmed = true;
+  // ek halki si call — sirf server jagane ke liye, result ignore
+  try{
+    var img = new Image();
+    img.src = API_URL + '?action=ping&_t=' + Date.now();
+  }catch(e){}
+}
+
 window.onload = loadApp;
 
 
-function onPublic(d){
-  if(!d || !d.ok){ onFail(d); return; }
+function onPublic(d, fromCache){
+  if(!d || !d.ok){ if(!fromCache) onFail(d); return; }
   applyBranding(d);
   renderQuickLinks(d.quickLinks || []);
   renderPagara(d.pagara);
@@ -260,10 +293,10 @@ function onPublic(d){
   document.getElementById('userChip').classList.add('hidden');
 }
 
-function onMyData(d){
+function onMyData(d, fromCache){
   if(!d || !d.ok){
     if (d && d.expired){ localStorage.removeItem('st_token'); TOKEN=''; api('getPublicData',{},onPublic); return; }
-    onFail(d); return;
+    if(!fromCache) onFail(d); return;
   }
   ME = d.user; PERMS = d.permissions;
   applyBranding(d.public);
@@ -322,16 +355,16 @@ function doLogin(){
     btn.disabled=false; btn.textContent='Login';
     if(!res || !res.ok){ setMsg('loginMsg',(res&&res.msg)||'लॉगिन विफल।','err'); return; }
     TOKEN=res.token; localStorage.setItem('st_token',TOKEN);
+    cacheSet('mydata', null);  // purana cache saaf, naya login ka data aayega
     closeLogin();
-    // links dobara load karte waqt spinner dikhao (white screen na lage)
     document.getElementById('quickLinks').innerHTML='<div class="center"><span class="spin"></span></div>';
     loadApp();
   });
 }
 function doLogout(){
-  // token yaad rakho taaki logout call bhej sakein, phir turant clear
   var oldToken = TOKEN;
   localStorage.removeItem('st_token'); TOKEN=''; ME=null; PERMS=null;
+  cacheSet('mydata', null);  // logged-in cache hata do
   document.getElementById('quickLinks').innerHTML='<div class="center"><span class="spin"></span></div>';
   loadApp();
   api('logout', { token: oldToken }, function(){});
