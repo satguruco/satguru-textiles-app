@@ -118,8 +118,6 @@
       <div class="head-right">
         <button class="btn-outline hidden" id="loginBtn" onclick="openLogin()">Login</button>
         <div class="user-chip hidden" id="userChip">
-          <span class="av" id="userAv">A</span>
-          <span id="userName">User</span>
           <button class="btn-outline hidden" id="adminBtn" onclick="openAdmin()">Admin</button>
           <button class="btn-outline" onclick="doLogout()">Logout</button>
         </div>
@@ -194,21 +192,32 @@
 var API_URL = "https://script.google.com/macros/s/AKfycbzA3cDDFIvCrUGf6x-WZGynAFjlCvo9tUUqfDIhD6WxuOrPdMhUPAighVe_UupIjWjX9w/exec";
 
 var _cbId = 0;
-// JSONP call: action + params bhejta hai, callback me jawab aata hai
-function api(action, params, cb){
+// JSONP call: action + params bhejta hai, callback me jawab aata hai.
+// Cold-start ke liye: 35 sec timeout + ek baar auto-retry.
+function api(action, params, cb, _try){
   params = params || {};
+  _try = _try || 1;
   var name = 'cb_' + (++_cbId) + '_' + Date.now();
+  var done = false;
   var timer = setTimeout(function(){
-    cleanup(); cb({ ok:false, msg:'Server se jawab nahi aaya (timeout).' });
-  }, 20000);
+    if (done) return;
+    cleanup();
+    if (_try < 2) {
+      // pehli baar timeout -> server shayad "jaag" raha tha, ek baar aur try karo
+      api(action, params, cb, _try + 1);
+    } else {
+      cb({ ok:false, msg:'Server se jawab nahi aaya. Thodi der baad dobara koshish karein.' });
+    }
+  }, 35000);
   function cleanup(){
+    done = true;
     try{ delete window[name]; }catch(e){ window[name]=undefined; }
     if(s && s.parentNode) s.parentNode.removeChild(s);
     clearTimeout(timer);
   }
   window[name] = function(res){ cleanup(); cb(res); };
 
-  var q = 'action=' + encodeURIComponent(action) + '&callback=' + name;
+  var q = 'action=' + encodeURIComponent(action) + '&callback=' + name + '&_t=' + Date.now();
   for (var k in params){
     var v = params[k];
     if (v !== null && typeof v === 'object') v = JSON.stringify(v);
@@ -216,7 +225,12 @@ function api(action, params, cb){
   }
   var s = document.createElement('script');
   s.src = API_URL + '?' + q;
-  s.onerror = function(){ cleanup(); cb({ ok:false, msg:'Network error. Internet check karein.' }); };
+  s.onerror = function(){
+    if (done) return;
+    cleanup();
+    if (_try < 2) { api(action, params, cb, _try + 1); }
+    else { cb({ ok:false, msg:'Network error. Internet check karein.' }); }
+  };
   document.body.appendChild(s);
 }
 
@@ -226,13 +240,16 @@ var ME = null, PERMS = null;
 document.getElementById('year').textContent = new Date().getFullYear();
 
 /* ============ INIT ============ */
-window.onload = function(){
+function loadApp(){
+  TOKEN = localStorage.getItem('st_token') || '';
   if (TOKEN){
     api('getMyData', { token: TOKEN }, onMyData);
   } else {
     api('getPublicData', {}, onPublic);
   }
-};
+}
+window.onload = loadApp;
+
 
 function onPublic(d){
   if(!d || !d.ok){ onFail(d); return; }
@@ -252,8 +269,6 @@ function onMyData(d){
   applyBranding(d.public);
   document.getElementById('loginBtn').classList.add('hidden');
   var chip=document.getElementById('userChip'); chip.classList.remove('hidden');
-  document.getElementById('userName').textContent = ME.name || ME.userId;
-  document.getElementById('userAv').textContent = (ME.name||ME.userId||'U').charAt(0).toUpperCase();
   var isAdmin = (ME.role||'').toLowerCase()==='md' || (ME.role||'').toLowerCase()==='admin';
   document.getElementById('adminBtn').classList.toggle('hidden', !isAdmin);
   var w=document.getElementById('welcomeLine');
@@ -307,13 +322,19 @@ function doLogin(){
     btn.disabled=false; btn.textContent='Login';
     if(!res || !res.ok){ setMsg('loginMsg',(res&&res.msg)||'लॉगिन विफल।','err'); return; }
     TOKEN=res.token; localStorage.setItem('st_token',TOKEN);
-    closeLogin(); window.onload();
+    closeLogin();
+    // links dobara load karte waqt spinner dikhao (white screen na lage)
+    document.getElementById('quickLinks').innerHTML='<div class="center"><span class="spin"></span></div>';
+    loadApp();
   });
 }
 function doLogout(){
-  api('logout', { token: TOKEN }, function(){
-    localStorage.removeItem('st_token'); TOKEN=''; ME=null; window.onload();
-  });
+  // token yaad rakho taaki logout call bhej sakein, phir turant clear
+  var oldToken = TOKEN;
+  localStorage.removeItem('st_token'); TOKEN=''; ME=null; PERMS=null;
+  document.getElementById('quickLinks').innerHTML='<div class="center"><span class="spin"></span></div>';
+  loadApp();
+  api('logout', { token: oldToken }, function(){});
 }
 
 /* ============ ADMIN ============ */
@@ -472,7 +493,25 @@ function onFail(err){
 /* ============ PWA service worker ============ */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function(){
-    navigator.serviceWorker.register('sw.js').catch(function(){});
+    navigator.serviceWorker.register('sw.js').then(function(reg){
+      // naya version aaye to purana chhod kar naya activate karo
+      reg.addEventListener('updatefound', function(){
+        var nw = reg.installing;
+        if (!nw) return;
+        nw.addEventListener('statechange', function(){
+          if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+            // naya SW taiyaar -> ek baar page refresh (white screen se bachne ke liye)
+            nw.postMessage && nw.postMessage('skipWaiting');
+          }
+        });
+      });
+    }).catch(function(){});
+    // jab naya SW control le, ek baar reload
+    var refreshed = false;
+    navigator.serviceWorker.addEventListener('controllerchange', function(){
+      if (refreshed) return; refreshed = true;
+      location.reload();
+    });
   });
 }
 </script>
