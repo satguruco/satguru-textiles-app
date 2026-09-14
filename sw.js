@@ -1,9 +1,8 @@
-/* Satguru Textiles — Service Worker (PWA offline support)
-   Ye file app ka "khol" (frontend) phone me save rakhti hai,
-   taaki app tez khule aur bina internet bhi kholne par kuch dikhe.
-   Data (links, login) to hamesha internet se hi aayega. */
+/* Satguru Textiles — Service Worker v2 (PWA)
+   Fix: "network-first" — hamesha nayi file laata hai, cache sirf backup.
+   Isse white-screen / purani file wali dikkat khatam. */
 
-var CACHE = 'satguru-v1';
+var CACHE = 'satguru-v2';
 var ASSETS = [
   './',
   './index.html',
@@ -29,23 +28,31 @@ self.addEventListener('activate', function(e){
 });
 
 self.addEventListener('fetch', function(e){
-  var url = e.request.url;
-  // API (Apps Script) aur forms ko kabhi cache mat karo — hamesha live lao
+  var req = e.request;
+  var url = req.url;
+  if (req.method !== 'GET') return;
+
   if (url.indexOf('script.google.com') !== -1 ||
       url.indexOf('googleusercontent.com') !== -1 ||
       url.indexOf('forms.gle') !== -1 ||
-      url.indexOf('docs.google.com') !== -1) {
-    return; // browser normal tareeke se laayega (live)
+      url.indexOf('docs.google.com') !== -1 ||
+      url.indexOf('fonts.googleapis.com') !== -1 ||
+      url.indexOf('fonts.gstatic.com') !== -1) {
+    return;
   }
-  // Baaki (app ka khol) — pehle cache, phir network
+
+  // NETWORK FIRST: pehle internet se nayi file, na mile to cache
   e.respondWith(
-    caches.match(e.request).then(function(hit){
-      return hit || fetch(e.request).then(function(resp){
-        return caches.open(CACHE).then(function(c){
-          try{ c.put(e.request, resp.clone()); }catch(err){}
-          return resp;
-        });
-      }).catch(function(){ return caches.match('./index.html'); });
+    fetch(req).then(function(resp){
+      try {
+        var copy = resp.clone();
+        caches.open(CACHE).then(function(c){ c.put(req, copy); });
+      } catch(err){}
+      return resp;
+    }).catch(function(){
+      return caches.match(req).then(function(hit){
+        return hit || caches.match('./index.html');
+      });
     })
   );
 });
