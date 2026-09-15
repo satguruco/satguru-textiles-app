@@ -57,6 +57,23 @@
   .link-name{font-size:1rem;font-weight:500;line-height:1.4;flex:1;}
   .link-arrow{color:var(--maroon-lighter);font-size:1.3rem;opacity:.6;}
 
+  /* Section heading (category) */
+  .sec-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;cursor:default;}
+  .sec-head.clickable{cursor:pointer;}
+  .sec-head h2{font-weight:700;font-size:1.35rem;color:var(--maroon-light);white-space:nowrap;}
+  .sec-head .rule{flex:1;height:1px;background:var(--line);}
+  .sec-head .chev{color:var(--maroon-light);font-size:1.1rem;transition:transform .2s ease;}
+  .sec-head .chev.closed{transform:rotate(-90deg);}
+  .sec-body{overflow:hidden;transition:max-height .25s ease;}
+  .sec-body.collapsed{max-height:0!important;}
+  /* List view */
+  .list-view{display:flex;flex-direction:column;gap:10px;}
+  .list-view .link-btn{border-radius:10px;}
+  /* Text / embed block */
+  .text-block{background:var(--cream-soft);border:1px solid var(--line);border-left:5px solid var(--gold);border-radius:12px;padding:16px 18px;font-size:.98rem;line-height:1.7;color:var(--ink);white-space:pre-wrap;}
+  .embed-block{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;}
+  .embed-block iframe{width:100%;border:0;display:block;min-height:420px;}
+
   .pagara{display:flex;align-items:center;justify-content:space-between;gap:22px;background:linear-gradient(135deg,var(--gold),var(--gold-light));border-radius:16px;padding:18px 26px;color:var(--maroon-dark);flex-wrap:wrap;transition:transform .12s ease,box-shadow .12s ease;}
   .pagara:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(201,162,75,.42);}
   .pagara-text h3{font-size:1.2rem;font-weight:700;}
@@ -138,10 +155,9 @@
     </div>
   </div>
 
-  <section class="block">
-    <div class="section-head"><h2 id="linksTitle">Quick Links</h2><span class="rule"></span></div>
-    <div class="grid" id="quickLinks"><div class="center"><span class="spin"></span></div></div>
-  </section>
+  <div id="sectionsWrap">
+    <section class="block"><div class="grid"><div class="center"><span class="spin"></span></div></div></section>
+  </div>
 
   <section class="block" id="pagaraSection" style="display:none;">
     <a class="pagara" id="pagaraBtn" href="#" target="_blank" rel="noopener">
@@ -178,6 +194,7 @@
       <div class="admin-tabs">
         <button class="active" data-tab="users" onclick="adminTab('users')">Users</button>
         <button data-tab="control" onclick="adminTab('control')">Links / Features</button>
+        <button data-tab="headings" onclick="adminTab('headings')">Headings</button>
         <button data-tab="settings" onclick="adminTab('settings')">Settings</button>
         <button data-tab="logs" onclick="adminTab('logs')">Logs</button>
       </div>
@@ -287,7 +304,7 @@ window.onload = loadApp;
 function onPublic(d, fromCache){
   if(!d || !d.ok){ if(!fromCache) onFail(d); return; }
   applyBranding(d);
-  renderQuickLinks(d.quickLinks || []);
+  renderSections(d.sections || []);
   renderPagara(d.pagara);
   document.getElementById('loginBtn').classList.toggle('hidden', !d.showLogin);
   document.getElementById('userChip').classList.add('hidden');
@@ -308,10 +325,10 @@ function onMyData(d, fromCache){
   w.textContent = 'नमस्ते, '+(ME.name||ME.userId)+' ('+ME.role+')';
   w.classList.remove('hidden');
 
-  var links=[], pagara=null;
-  (d.features||[]).forEach(function(f){ if (f.type==='pagara') pagara=f; else links.push(f); });
-  document.getElementById('linksTitle').textContent='Menu';
-  renderQuickLinks(links);
+  // pagara sections me nahi aata, alag bheja jaata hai — use features se nikaalo
+  var pagara=null;
+  (d.features||[]).forEach(function(f){ if (f.type==='pagara') pagara=f; });
+  renderSections(d.sections || []);
   renderPagara(pagara);
 }
 
@@ -320,18 +337,79 @@ function applyBranding(d){
   if(d.companyName) document.getElementById('brandName').textContent=d.companyName;
   if(d.tagline) document.getElementById('brandTag').textContent=d.tagline;
 }
-function renderQuickLinks(items){
-  var box=document.getElementById('quickLinks');
-  if(!items || !items.length){ box.innerHTML='<div class="center">कोई लिंक उपलब्ध नहीं।</div>'; return; }
-  var html='';
-  items.forEach(function(l,i){
-    html+='<a class="link-btn" href="'+l.link+'" target="_blank" rel="noopener">'+
-            '<span class="link-icon">'+(i+1)+'</span>'+
-            '<span class="link-name hi">'+l.name+'</span>'+
-            '<span class="link-arrow">&rsaquo;</span></a>';
+
+/* ====== SECTIONS RENDER (categorized headings) ====== */
+function renderSections(sections){
+  var wrap = document.getElementById('sectionsWrap');
+  if(!sections || !sections.length){
+    wrap.innerHTML = '<section class="block"><div class="center">कोई लिंक उपलब्ध नहीं।</div></section>';
+    return;
+  }
+  var html = '';
+  sections.forEach(function(sec, si){
+    var bodyId = 'secbody_'+si;
+    var clickable = sec.collapsible ? ' clickable' : '';
+    var chev = sec.collapsible ? '<span class="chev" id="chev_'+si+'">&#9660;</span>' : '';
+    var onclick = sec.collapsible ? ' onclick="toggleSec('+si+')"' : '';
+
+    html += '<section class="block">';
+    if (sec.name){
+      html += '<div class="sec-head'+clickable+'"'+onclick+'>'+
+                '<h2 class="hi">'+esc(sec.name)+'</h2><span class="rule"></span>'+chev+'</div>';
+    }
+    html += '<div class="sec-body" id="'+bodyId+'">';
+
+    if (sec.type === 'text'){
+      // Text ya Sheet-embed
+      var txt = sec.text || '';
+      if (isEmbeddableUrl(txt)){
+        html += '<div class="embed-block"><iframe src="'+embedUrl(txt)+'" loading="lazy"></iframe></div>';
+      } else {
+        html += '<div class="text-block hi">'+esc(txt)+'</div>';
+      }
+    } else {
+      // Links: grid ya list
+      var links = sec.links || [];
+      var cls = (sec.view === 'list') ? 'list-view' : 'grid';
+      html += '<div class="'+cls+'">';
+      links.forEach(function(l){
+        html += '<a class="link-btn" href="'+l.link+'" target="_blank" rel="noopener">'+
+                  '<span class="link-name hi">'+esc(l.name)+'</span>'+
+                  '<span class="link-arrow">&rsaquo;</span></a>';
+      });
+      html += '</div>';
+    }
+    html += '</div></section>';
   });
-  box.innerHTML=html;
+  wrap.innerHTML = html;
 }
+
+function toggleSec(i){
+  var body = document.getElementById('secbody_'+i);
+  var chev = document.getElementById('chev_'+i);
+  if(!body) return;
+  if (body.classList.contains('collapsed')){
+    body.classList.remove('collapsed'); if(chev) chev.classList.remove('closed');
+  } else {
+    body.classList.add('collapsed'); if(chev) chev.classList.add('closed');
+  }
+}
+
+// Google Sheet / Docs URL ko embed-yogya banao
+function isEmbeddableUrl(t){
+  t = String(t||'').trim();
+  return /^https?:\/\//i.test(t) && (t.indexOf('docs.google.com')!==-1 || t.indexOf('sheets')!==-1 || /\.(png|jpg|jpeg|gif|pdf)$/i.test(t) || t.indexOf('http')===0);
+}
+function embedUrl(t){
+  t = String(t||'').trim();
+  // Google Sheet ko "preview/embed" roop me kholo
+  if (t.indexOf('docs.google.com/spreadsheets')!==-1){
+    // /edit ko /preview me badlo (embed ke liye behtar)
+    return t.replace(/\/edit.*$/, '/preview').replace(/\?.*$/,'') ;
+  }
+  return t;
+}
+
 function renderPagara(p){
   var sec=document.getElementById('pagaraSection');
   if(!p){ sec.style.display='none'; return; }
@@ -357,7 +435,7 @@ function doLogin(){
     TOKEN=res.token; localStorage.setItem('st_token',TOKEN);
     cacheSet('mydata', null);  // purana cache saaf, naya login ka data aayega
     closeLogin();
-    document.getElementById('quickLinks').innerHTML='<div class="center"><span class="spin"></span></div>';
+    document.getElementById('sectionsWrap').innerHTML='<section class="block"><div class="center"><span class="spin"></span></div></section>';
     loadApp();
   });
 }
@@ -365,7 +443,7 @@ function doLogout(){
   var oldToken = TOKEN;
   localStorage.removeItem('st_token'); TOKEN=''; ME=null; PERMS=null;
   cacheSet('mydata', null);  // logged-in cache hata do
-  document.getElementById('quickLinks').innerHTML='<div class="center"><span class="spin"></span></div>';
+  document.getElementById('sectionsWrap').innerHTML='<section class="block"><div class="center"><span class="spin"></span></div></section>';
   loadApp();
   api('logout', { token: oldToken }, function(){});
 }
@@ -380,6 +458,7 @@ function adminTab(name){
   setActiveTab(name); adminLoading();
   if(name==='users') api('adminGetUsers',{token:TOKEN},renderUsers);
   if(name==='control') api('adminGetControl',{token:TOKEN},renderControl);
+  if(name==='headings') api('adminGetHeadings',{token:TOKEN},renderHeadings);
   if(name==='settings') api('adminGetSettings',{token:TOKEN},renderSettings);
   if(name==='logs') api('adminGetLogs',{token:TOKEN,limit:100},renderLogs);
 }
@@ -433,10 +512,10 @@ function renderControl(res){
   if(!res || !res.ok){ adminErr(res); return; }
   var rows=res.rows||[];
   var h='<button class="mini add" onclick="ctrlForm()">+ नया लिंक / फ़ीचर</button>';
-  h+='<table><tr><th>FeatureID</th><th>Type</th><th>Name</th><th>Link</th><th>Show</th><th>Order</th><th></th></tr>';
+  h+='<table><tr><th>FeatureID</th><th>Type</th><th>Name</th><th>Heading</th><th>Show</th><th>Order</th><th></th></tr>';
   rows.forEach(function(c){
     h+='<tr><td>'+esc(c.FeatureID)+'</td><td>'+esc(c.Type)+'</td><td>'+esc(c.Name)+'</td>'+
-       '<td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+esc(c.Link)+'</td>'+
+       '<td>'+esc(c.HeadingID||'')+'</td>'+
        '<td>'+esc(c.Show)+'</td><td>'+esc(c.Order)+'</td>'+
        '<td><button class="mini edit" onclick=\'ctrlForm('+JSON.stringify(c).replace(/'/g,"&#39;")+')\'>Edit</button> '+
        '<button class="mini del" onclick="ctrlDel('+c._row+')">Del</button></td></tr>';
@@ -446,22 +525,32 @@ function renderControl(res){
 }
 function ctrlForm(c){
   c=c||{};
-  var types=['form','link','pagara'];
-  var typeOpts=types.map(function(t){return '<option '+((String(c.Type).toLowerCase()===t)?'selected':'')+'>'+t+'</option>';}).join('');
-  var h='<h3 style="color:var(--maroon-light);margin-bottom:16px;">'+(c._row?'लिंक एडिट करें':'नया लिंक जोड़ें')+'</h3>';
-  h+='<div class="msg" id="cMsg"></div>';
-  h+=field('FeatureID (unique, English)','cFid',c.FeatureID||'','text','जैसे: leave, inquiry');
-  h+='<div class="field"><label>Type</label><select id="cType">'+typeOpts+'</select></div>';
-  h+=field('Name (जो दिखेगा)','cName',c.Name||'','text','जैसे: लीव फॉर्म');
-  h+=field('Link (URL)','cLink',c.Link||'','text','https://...');
-  h+='<div class="field"><label>Show (guest page par dikhe?)</label><select id="cShow"><option '+((_yn(c.Show))?'selected':'')+' value="TRUE">Haan</option><option '+((!_yn(c.Show)&&c._row)?'selected':'')+' value="FALSE">Nahi</option></select></div>';
-  h+=field('Order (kram number)','cOrder',c.Order||'','text','जैसे: 1,2,3');
-  h+='<button class="btn-primary" onclick=\'ctrlSave('+(c._row||0)+')\'>Save</button> ';
-  h+='<button class="mini" style="background:#ddd;margin-top:8px;" onclick="adminTab(\'control\')">Cancel</button>';
-  document.getElementById('adminBody').innerHTML=h;
+  // headings list laao dropdown ke liye
+  api('adminGetHeadings',{token:TOKEN},function(hres){
+    var hopts='<option value="">— koi nahi (Quick Links) —</option>';
+    if(hres && hres.ok){ (hres.rows||[]).forEach(function(hd){
+      var id=String(hd.HeadingID||'').trim();
+      if(!id) return;
+      hopts+='<option value="'+esc(id)+'" '+((String(c.HeadingID||'')===id)?'selected':'')+'>'+esc(hd.HeadingName||id)+' ('+esc(id)+')</option>';
+    });}
+    var types=['form','link','pagara'];
+    var typeOpts=types.map(function(t){return '<option '+((String(c.Type).toLowerCase()===t)?'selected':'')+'>'+t+'</option>';}).join('');
+    var h='<h3 style="color:var(--maroon-light);margin-bottom:16px;">'+(c._row?'लिंक एडिट करें':'नया लिंक जोड़ें')+'</h3>';
+    h+='<div class="msg" id="cMsg"></div>';
+    h+=field('FeatureID (unique, English)','cFid',c.FeatureID||'','text','जैसे: leave, inquiry');
+    h+='<div class="field"><label>Type</label><select id="cType">'+typeOpts+'</select></div>';
+    h+=field('Name (जो दिखेगा)','cName',c.Name||'','text','जैसे: लीव फॉर्म');
+    h+=field('Link (URL)','cLink',c.Link||'','text','https://...');
+    h+='<div class="field"><label>Heading (kis category me dikhe?)</label><select id="cHead">'+hopts+'</select></div>';
+    h+='<div class="field"><label>Show (dikhe?)</label><select id="cShow"><option '+((_yn(c.Show))?'selected':'')+' value="TRUE">Haan</option><option '+((!_yn(c.Show)&&c._row)?'selected':'')+' value="FALSE">Nahi</option></select></div>';
+    h+=field('Order (kram number)','cOrder',c.Order||'','text','जैसे: 1,2,3');
+    h+='<button class="btn-primary" onclick=\'ctrlSave('+(c._row||0)+')\'>Save</button> ';
+    h+='<button class="mini" style="background:#ddd;margin-top:8px;" onclick="adminTab(\'control\')">Cancel</button>';
+    document.getElementById('adminBody').innerHTML=h;
+  });
 }
 function ctrlSave(row){
-  var item={ FeatureID:val('cFid'), Type:val('cType'), Name:val('cName'), Link:val('cLink'), Show:val('cShow'), Order:val('cOrder') };
+  var item={ FeatureID:val('cFid'), Type:val('cType'), Name:val('cName'), Link:val('cLink'), HeadingID:val('cHead'), Show:val('cShow'), Order:val('cOrder') };
   if(row) item._row=row;
   if(!item.Name||!item.Link){ document.getElementById('cMsg').className='msg err'; document.getElementById('cMsg').textContent='Name aur Link zaroori hain.'; return; }
   api('adminSaveControl', { token:TOKEN, item:item }, function(r){
@@ -472,6 +561,55 @@ function ctrlSave(row){
 function ctrlDel(row){
   if(!confirm('Pakka is link ko hataana hai?')) return;
   api('adminDeleteControl', { token:TOKEN, rowNum:row }, function(){ adminTab('control'); });
+}
+
+/* ---- HEADINGS (categories) ---- */
+function renderHeadings(res){
+  if(!res || !res.ok){ adminErr(res); return; }
+  var rows=res.rows||[];
+  var h='<button class="mini add" onclick="headForm()">+ नई Heading</button>';
+  h+='<table><tr><th>ID</th><th>Name</th><th>Order</th><th>Show</th><th>View</th><th>Collapse</th><th>Type</th><th></th></tr>';
+  rows.forEach(function(c){
+    h+='<tr><td>'+esc(c.HeadingID)+'</td><td>'+esc(c.HeadingName)+'</td><td>'+esc(c.HeadingOrder)+'</td>'+
+       '<td>'+esc(c.Show)+'</td><td>'+esc(c.View)+'</td><td>'+esc(c.Collapsible)+'</td><td>'+esc(c.Type)+'</td>'+
+       '<td><button class="mini edit" onclick=\'headForm('+JSON.stringify(c).replace(/'/g,"&#39;")+')\'>Edit</button> '+
+       '<button class="mini del" onclick="headDel('+c._row+')">Del</button></td></tr>';
+  });
+  h+='</table><p style="margin-top:12px;font-size:.82rem;color:var(--maroon-lighter);">Type <b>text</b> hai to "Text" column me likha content (ya Google Sheet link) heading ke neeche dikhega.</p>';
+  document.getElementById('adminBody').innerHTML=h;
+}
+function headForm(c){
+  c=c||{};
+  var views=['grid','list'];
+  var viewOpts=views.map(function(t){return '<option '+((String(c.View||'grid').toLowerCase()===t)?'selected':'')+'>'+t+'</option>';}).join('');
+  var types=['links','text'];
+  var typeOpts=types.map(function(t){return '<option '+((String(c.Type||'links').toLowerCase()===t)?'selected':'')+'>'+t+'</option>';}).join('');
+  var h='<h3 style="color:var(--maroon-light);margin-bottom:16px;">'+(c._row?'Heading एडिट करें':'नई Heading जोड़ें')+'</h3>';
+  h+='<div class="msg" id="hMsg"></div>';
+  h+=field('Heading ID (unique, English)','hId',c.HeadingID||'','text','जैसे: daily, stock, hr');
+  h+=field('Heading Name (जो दिखेगा)','hName',c.HeadingName||'','text','जैसे: दैनिक फॉर्म');
+  h+=field('Order (kram)','hOrder',c.HeadingOrder||'','text','1,2,3...');
+  h+='<div class="field"><label>Show (dikhe?)</label><select id="hShow"><option '+((_yn(c.Show))?'selected':'')+' value="TRUE">Haan</option><option '+((!_yn(c.Show)&&c._row)?'selected':'')+' value="FALSE">Nahi</option></select></div>';
+  h+='<div class="field"><label>View</label><select id="hView">'+viewOpts+'</select></div>';
+  h+='<div class="field"><label>Collapsible (khul-band ho sake?)</label><select id="hColl"><option '+((_yn(c.Collapsible))?'selected':'')+' value="TRUE">Haan</option><option '+((!_yn(c.Collapsible)&&c._row)?'selected':'')+' value="FALSE">Nahi</option></select></div>';
+  h+='<div class="field"><label>Type</label><select id="hType">'+typeOpts+'</select></div>';
+  h+='<div class="field"><label>Text (agar Type=text: likha content YA Google Sheet link)</label><textarea id="hText" style="width:100%;min-height:80px;padding:12px;border:1px solid var(--line);border-radius:10px;font-family:inherit;">'+esc(c.Text||'')+'</textarea></div>';
+  h+='<button class="btn-primary" onclick=\'headSave('+(c._row||0)+')\'>Save</button> ';
+  h+='<button class="mini" style="background:#ddd;margin-top:8px;" onclick="adminTab(\'headings\')">Cancel</button>';
+  document.getElementById('adminBody').innerHTML=h;
+}
+function headSave(row){
+  var item={ HeadingID:val('hId'), HeadingName:val('hName'), HeadingOrder:val('hOrder'), Show:val('hShow'), View:val('hView'), Collapsible:val('hColl'), Type:val('hType'), Text:document.getElementById('hText').value };
+  if(row) item._row=row;
+  if(!item.HeadingID||!item.HeadingName){ document.getElementById('hMsg').className='msg err'; document.getElementById('hMsg').textContent='Heading ID aur Name zaroori hain.'; return; }
+  api('adminSaveHeading', { token:TOKEN, item:item }, function(r){
+    if(!r || !r.ok){ document.getElementById('hMsg').className='msg err'; document.getElementById('hMsg').textContent=(r&&r.msg)||'Error'; return; }
+    adminTab('headings');
+  });
+}
+function headDel(row){
+  if(!confirm('Pakka is heading ko hataana hai?')) return;
+  api('adminDeleteHeading', { token:TOKEN, rowNum:row }, function(){ adminTab('headings'); });
 }
 
 function renderSettings(res){
@@ -519,7 +657,7 @@ function toast(t){
   document.body.appendChild(d); setTimeout(function(){d.remove();},2000);
 }
 function onFail(err){
-  var box=document.getElementById('quickLinks');
+  var box=document.getElementById('sectionsWrap');
   if(box) box.innerHTML='<div class="center">डेटा लोड नहीं हुआ। पेज रिफ्रेश करें।<br><small>'+((err&&err.msg)||'')+'</small></div>';
 }
 
