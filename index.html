@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#3D0F1B">
-<title>Satguru Textiles — Your Reliable Partner</title>
+<title>Satguru Textiles</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
@@ -19,6 +19,7 @@
   body{background:var(--cream);color:var(--ink);font-family:'Poppins',system-ui,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.55;}
   .hi{font-family:'Tiro Devanagari Hindi',serif;}
   a{text-decoration:none;color:inherit}
+  .hidden{display:none!important;}
 
   header{background:var(--maroon-dark);position:sticky;top:0;z-index:50;border-bottom:2px solid var(--gold);}
   .header-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:14px 20px;gap:12px;}
@@ -26,12 +27,8 @@
   .brand .logo{width:52px;height:52px;border-radius:50%;object-fit:cover;background:#fff;border:3px solid var(--gold);box-shadow:0 3px 10px rgba(0,0,0,.35);display:block;}
   .brand-name{font-weight:700;font-size:1.25rem;line-height:1.1;color:var(--cream);}
   .brand-tag{font-size:.64rem;color:var(--gold-light);letter-spacing:2px;font-weight:500;margin-top:2px;text-transform:uppercase;}
-  .head-right{display:flex;align-items:center;gap:10px;}
   .btn-outline{background:transparent;color:var(--gold-light);border:1px solid var(--gold);border-radius:8px;padding:8px 18px;font-family:inherit;font-weight:600;font-size:.88rem;cursor:pointer;}
   .btn-outline:hover{background:var(--gold);color:var(--maroon-dark);}
-  .user-chip{display:flex;align-items:center;gap:8px;color:var(--cream);font-size:.85rem;}
-  .user-chip .av{width:34px;height:34px;border-radius:50%;background:var(--maroon-light);color:var(--gold-light);display:flex;align-items:center;justify-content:center;font-weight:700;}
-  .hidden{display:none!important;}
 
   .hero{max-width:1100px;margin:28px auto 0;padding:0 20px;}
   .hero-card{background:linear-gradient(135deg,var(--maroon),var(--maroon-light));border:1px solid var(--gold);border-radius:20px;padding:38px 34px;color:var(--cream);position:relative;overflow:hidden;}
@@ -44,21 +41,8 @@
   .hero-divider{width:60px;height:2px;background:var(--gold);margin:18px 0;opacity:.85;}
   .hero-desc{max-width:600px;font-size:.96rem;color:rgba(246,239,226,.92);line-height:1.7;}
 
-  section.block{max-width:1100px;margin:40px auto 0;padding:0 20px;}
-  .section-head{display:flex;align-items:center;gap:16px;margin-bottom:20px;}
-  .section-head h2{font-weight:700;font-size:1.4rem;color:var(--maroon-light);white-space:nowrap;}
-  .section-head .rule{flex:1;height:1px;background:var(--line);}
-
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
-  .link-btn{display:flex;align-items:center;gap:14px;background:var(--cream-soft);border:1px solid var(--line);border-left:5px solid var(--maroon-light);border-radius:12px;padding:15px 18px;color:var(--ink);transition:transform .12s ease,box-shadow .12s ease,background .12s ease;}
-  .link-btn:active{transform:scale(.98);}
-  .link-btn:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(138,51,70,.16);background:#fff;}
-  .link-icon{width:34px;height:34px;flex:0 0 34px;border-radius:50%;background:var(--maroon-light);color:var(--gold-light);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:.95rem;}
-  .link-name{font-size:1rem;font-weight:500;line-height:1.4;flex:1;}
-  .link-arrow{color:var(--maroon-lighter);font-size:1.3rem;opacity:.6;}
-
-  /* Section heading (category) */
-  .sec-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;cursor:default;}
+  section.block{max-width:1100px;margin:36px auto 0;padding:0 20px;}
+  .sec-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
   .sec-head.clickable{cursor:pointer;}
   .sec-head h2{font-weight:700;font-size:1.35rem;color:var(--maroon-light);white-space:nowrap;}
   .sec-head .rule{flex:1;height:1px;background:var(--line);}
@@ -66,10 +50,14 @@
   .sec-head .chev.closed{transform:rotate(-90deg);}
   .sec-body{overflow:hidden;transition:max-height .25s ease;}
   .sec-body.collapsed{max-height:0!important;}
-  /* List view */
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;}
   .list-view{display:flex;flex-direction:column;gap:10px;}
-  .list-view .link-btn{border-radius:10px;}
-  /* Text / embed block */
+  .link-btn{display:flex;align-items:center;gap:14px;background:var(--cream-soft);border:1px solid var(--line);border-left:5px solid var(--maroon-light);border-radius:12px;padding:15px 18px;color:var(--ink);transition:transform .12s ease,box-shadow .12s ease,background .12s ease;}
+  .link-btn:active{transform:scale(.98);}
+  .link-btn:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(138,51,70,.16);background:#fff;}
+  .link-name{font-size:1rem;font-weight:500;line-height:1.4;flex:1;}
+  .link-arrow{color:var(--maroon-lighter);font-size:1.3rem;opacity:.6;}
   .text-block{background:var(--cream-soft);border:1px solid var(--line);border-left:5px solid var(--gold);border-radius:12px;padding:16px 18px;font-size:.98rem;line-height:1.7;color:var(--ink);white-space:pre-wrap;}
   .embed-block{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;}
   .embed-block iframe{width:100%;border:0;display:block;min-height:420px;}
@@ -95,27 +83,13 @@
   .modal-body{padding:24px;}
   .field{margin-bottom:16px;}
   .field label{display:block;font-size:.82rem;font-weight:600;color:var(--maroon-light);margin-bottom:6px;}
-  .field input,.field select{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-family:inherit;font-size:1rem;background:#fff;color:var(--ink);}
-  .field input:focus,.field select:focus{outline:2px solid var(--maroon-light);border-color:var(--maroon-light);}
+  .field input{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font-family:inherit;font-size:1rem;background:#fff;color:var(--ink);}
+  .field input:focus{outline:2px solid var(--maroon-light);border-color:var(--maroon-light);}
   .btn-primary{width:100%;background:var(--maroon);color:var(--cream);border:none;border-radius:10px;padding:13px;font-family:inherit;font-weight:600;font-size:1rem;cursor:pointer;}
   .btn-primary:hover{background:var(--maroon-light);}
   .btn-primary:disabled{opacity:.6;cursor:not-allowed;}
   .msg{font-size:.86rem;padding:10px 12px;border-radius:8px;margin-bottom:14px;display:none;}
   .msg.err{background:#fbe6e6;color:#a11;display:block;}
-  .msg.ok{background:#e6f6ea;color:#161;display:block;}
-
-  .admin-modal{max-width:920px;}
-  .admin-tabs{display:flex;gap:6px;background:var(--maroon-dark);padding:0 12px;overflow-x:auto;}
-  .admin-tabs button{background:none;border:none;color:rgba(246,239,226,.7);padding:14px 16px;font-family:inherit;font-weight:600;font-size:.9rem;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;}
-  .admin-tabs button.active{color:var(--gold-light);border-bottom-color:var(--gold);}
-  .admin-body{padding:20px;max-height:70vh;overflow-y:auto;}
-  table{width:100%;border-collapse:collapse;font-size:.86rem;}
-  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);}
-  th{color:var(--maroon-light);font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;}
-  .mini{padding:6px 12px;font-size:.8rem;border-radius:8px;border:none;cursor:pointer;font-family:inherit;font-weight:600;}
-  .mini.edit{background:var(--gold);color:var(--maroon-dark);}
-  .mini.del{background:#e5b3b3;color:#7a1a1a;}
-  .mini.add{background:var(--maroon);color:var(--cream);padding:10px 18px;font-size:.9rem;margin-bottom:14px;}
   .center{text-align:center;padding:40px 0;color:var(--maroon-lighter);}
   .spin{display:inline-block;width:22px;height:22px;border:3px solid var(--line);border-top-color:var(--maroon);border-radius:50%;animation:sp 1s linear infinite;}
   @keyframes sp{to{transform:rotate(360deg)}}
@@ -132,12 +106,9 @@
           <div class="brand-tag" id="brandTag">Your Reliable Partner</div>
         </div>
       </div>
-      <div class="head-right">
-        <button class="btn-outline hidden" id="loginBtn" onclick="openLogin()">Login</button>
-        <div class="user-chip hidden" id="userChip">
-          <button class="btn-outline hidden" id="adminBtn" onclick="openAdmin()">Admin</button>
-          <button class="btn-outline" onclick="doLogout()">Logout</button>
-        </div>
+      <div>
+        <button class="btn-outline" id="loginBtn" onclick="openLogin()">Login</button>
+        <button class="btn-outline hidden" id="logoutBtn" onclick="doLogout()">Logout</button>
       </div>
     </div>
   </header>
@@ -150,7 +121,7 @@
         <h1 class="hero-title">SATGURU TEXTILES</h1>
         <div class="hero-sub">"Your Reliable Partner"</div>
         <div class="hero-divider"></div>
-        <p class="hero-desc">Trusted wholesaler in Sagar, Madhya Pradesh — quality fabric and handloom supplier serving the region for over four decades.</p>
+        <p class="hero-desc">Trusted wholesaler in Sagar, Madhya Pradesh - quality fabric and handloom supplier serving the region for over four decades.</p>
       </div>
     </div>
   </div>
@@ -174,242 +145,125 @@
     <div class="footer-bar">&copy; <span id="year"></span> Satguru Textiles &middot; Sagar, Madhya Pradesh</div>
   </footer>
 
-  <!-- LOGIN MODAL -->
   <div class="overlay hidden" id="loginOverlay">
     <div class="modal">
       <div class="modal-head"><h3>Login</h3><button class="x" onclick="closeLogin()">&times;</button></div>
       <div class="modal-body">
         <div class="msg" id="loginMsg"></div>
-        <div class="field"><label>यूज़र आईडी (User ID)</label><input id="inUser" type="text" autocomplete="username" placeholder="जैसे: admin या मोबाइल नंबर"></div>
-        <div class="field"><label>पासवर्ड (Password)</label><input id="inPass" type="password" autocomplete="current-password" placeholder="••••••"></div>
+        <div class="field"><label>User ID</label><input id="inUser" type="text" autocomplete="username" placeholder="User ID"></div>
+        <div class="field"><label>Password</label><input id="inPass" type="password" autocomplete="current-password" placeholder="Password"></div>
         <button class="btn-primary" id="loginSubmit" onclick="doLogin()">Login</button>
       </div>
     </div>
   </div>
 
-  <!-- ADMIN MODAL -->
-  <div class="overlay hidden" id="adminOverlay">
-    <div class="modal admin-modal">
-      <div class="modal-head"><h3>Admin Panel</h3><button class="x" onclick="closeAdmin()">&times;</button></div>
-      <div class="admin-tabs">
-        <button class="active" data-tab="users" onclick="adminTab('users')">Users</button>
-        <button data-tab="control" onclick="adminTab('control')">Links / Features</button>
-        <button data-tab="headings" onclick="adminTab('headings')">Headings</button>
-        <button data-tab="settings" onclick="adminTab('settings')">Settings</button>
-        <button data-tab="logs" onclick="adminTab('logs')">Logs</button>
-      </div>
-      <div class="admin-body" id="adminBody"><div class="center"><span class="spin"></span></div></div>
-    </div>
-  </div>
-
 <script>
-/* =====================================================
-   API se baat karne ka setup (JSONP - CORS-free)
-   ===================================================== */
 var API_URL = "https://script.google.com/macros/s/AKfycbzA3cDDFIvCrUGf6x-WZGynAFjlCvo9tUUqfDIhD6WxuOrPdMhUPAighVe_UupIjWjX9w/exec";
+var TOKEN = localStorage.getItem('st_token') || '';
+document.getElementById('year').textContent = new Date().getFullYear();
 
-var _cbId = 0;
-// JSONP call: action + params bhejta hai, callback me jawab aata hai.
-// Cold-start ke liye: 35 sec timeout + ek baar auto-retry.
+// JSONP call (no cache) - 35s timeout + 1 retry
+var _cb=0;
 function api(action, params, cb, _try){
-  params = params || {};
-  _try = _try || 1;
-  var name = 'cb_' + (++_cbId) + '_' + Date.now();
-  var done = false;
-  var timer = setTimeout(function(){
-    if (done) return;
-    cleanup();
-    if (_try < 2) {
-      // pehli baar timeout -> server shayad "jaag" raha tha, ek baar aur try karo
-      api(action, params, cb, _try + 1);
-    } else {
-      cb({ ok:false, msg:'Server se jawab nahi aaya. Thodi der baad dobara koshish karein.' });
-    }
-  }, 35000);
-  function cleanup(){
-    done = true;
-    try{ delete window[name]; }catch(e){ window[name]=undefined; }
-    if(s && s.parentNode) s.parentNode.removeChild(s);
-    clearTimeout(timer);
-  }
-  window[name] = function(res){ cleanup(); cb(res); };
-
-  var q = 'action=' + encodeURIComponent(action) + '&callback=' + name + '&_t=' + Date.now();
-  for (var k in params){
-    var v = params[k];
-    if (v !== null && typeof v === 'object') v = JSON.stringify(v);
-    q += '&' + encodeURIComponent(k) + '=' + encodeURIComponent(v);
-  }
-  var s = document.createElement('script');
-  s.src = API_URL + '?' + q;
-  s.onerror = function(){
-    if (done) return;
-    cleanup();
-    if (_try < 2) { api(action, params, cb, _try + 1); }
-    else { cb({ ok:false, msg:'Network error. Internet check karein.' }); }
-  };
+  params=params||{}; _try=_try||1;
+  var name='cb_'+(++_cb)+'_'+Date.now();
+  var done=false;
+  var timer=setTimeout(function(){
+    if(done) return; cleanup();
+    if(_try<2) api(action,params,cb,_try+1);
+    else cb({ok:false,msg:'Server se jawab nahi aaya. Dobara koshish karein.'});
+  },35000);
+  function cleanup(){ done=true; try{delete window[name];}catch(e){window[name]=undefined;} if(s&&s.parentNode) s.parentNode.removeChild(s); clearTimeout(timer); }
+  window[name]=function(res){ cleanup(); cb(res); };
+  var q='action='+encodeURIComponent(action)+'&callback='+name+'&_t='+Date.now();
+  for(var k in params){ var v=params[k]; if(v!==null&&typeof v==='object') v=JSON.stringify(v); q+='&'+encodeURIComponent(k)+'='+encodeURIComponent(v); }
+  var s=document.createElement('script');
+  s.src=API_URL+'?'+q;
+  s.onerror=function(){ if(done)return; cleanup(); if(_try<2) api(action,params,cb,_try+1); else cb({ok:false,msg:'Network error.'}); };
   document.body.appendChild(s);
 }
 
-/* ============ STATE ============ */
-var TOKEN = localStorage.getItem('st_token') || '';
-var ME = null, PERMS = null;
-document.getElementById('year').textContent = new Date().getFullYear();
-
-/* ============ INIT (smart: cache-first + warm-up) ============ */
-
-// Cache helpers — data ko phone me save/nikaalte hain
-function cacheSet(key, val){ try{ localStorage.setItem('st_cache_'+key, JSON.stringify(val)); }catch(e){} }
-function cacheGet(key){ try{ var v=localStorage.getItem('st_cache_'+key); return v?JSON.parse(v):null; }catch(e){ return null; } }
-
 function loadApp(){
-  TOKEN = localStorage.getItem('st_token') || '';
-
-  if (TOKEN){
-    // Logged-in: pehle cache se TURANT dikhao (agar hai), phir fresh laao
-    var cached = cacheGet('mydata');
-    if (cached && cached.ok){ onMyData(cached, true); }   // true = cache se
-    api('getMyData', { token: TOKEN }, function(d){
-      if (d && d.ok){ cacheSet('mydata', d); onMyData(d); }
-      else if (d && d.expired){ localStorage.removeItem('st_token'); TOKEN=''; cacheSet('mydata',null); loadApp(); }
-      else if (!cached){ onFail(d); }   // fresh fail aur cache bhi nahi -> error
+  TOKEN=localStorage.getItem('st_token')||'';
+  if(TOKEN){
+    api('getMyData',{token:TOKEN},function(d){
+      if(d&&d.ok){ showLoggedIn(d); }
+      else if(d&&d.expired){ localStorage.removeItem('st_token'); TOKEN=''; loadApp(); }
+      else onFail(d);
     });
   } else {
-    // Guest: pehle cache se turant, phir fresh
-    var cp = cacheGet('public');
-    if (cp && cp.ok){ onPublic(cp, true); }
-    api('getPublicData', {}, function(d){
-      if (d && d.ok){ cacheSet('public', d); onPublic(d); }
-      else if (!cp){ onFail(d); }
+    api('getPublicData',{},function(d){
+      if(d&&d.ok) showGuest(d); else onFail(d);
     });
   }
-
-  // Warm-up: server ko "jaga" do taaki agli call (login/admin) tez ho
   warmUp();
 }
+var _warmed=false;
+function warmUp(){ if(_warmed)return; _warmed=true; try{ var i=new Image(); i.src=API_URL+'?action=ping&_t='+Date.now(); }catch(e){} }
 
-var _warmed = false;
-function warmUp(){
-  if (_warmed) return; _warmed = true;
-  // ek halki si call — sirf server jagane ke liye, result ignore
-  try{
-    var img = new Image();
-    img.src = API_URL + '?action=ping&_t=' + Date.now();
-  }catch(e){}
-}
-
-window.onload = loadApp;
-
-
-function onPublic(d, fromCache){
-  if(!d || !d.ok){ if(!fromCache) onFail(d); return; }
+function showGuest(d){
   applyBranding(d);
-  renderSections(d.sections || []);
+  document.getElementById('loginBtn').classList.remove('hidden');
+  document.getElementById('logoutBtn').classList.add('hidden');
+  document.getElementById('welcomeLine').classList.add('hidden');
+  renderSections(d.sections||[]);
   renderPagara(d.pagara);
-  document.getElementById('loginBtn').classList.toggle('hidden', !d.showLogin);
-  document.getElementById('userChip').classList.add('hidden');
 }
-
-function onMyData(d, fromCache){
-  if(!d || !d.ok){
-    if (d && d.expired){ localStorage.removeItem('st_token'); TOKEN=''; api('getPublicData',{},onPublic); return; }
-    if(!fromCache) onFail(d); return;
-  }
-  ME = d.user; PERMS = d.permissions;
-  applyBranding(d.public);
+function showLoggedIn(d){
+  applyBranding(d);
   document.getElementById('loginBtn').classList.add('hidden');
-  var chip=document.getElementById('userChip'); chip.classList.remove('hidden');
-  var isAdmin = (ME.role||'').toLowerCase()==='md' || (ME.role||'').toLowerCase()==='admin';
-  document.getElementById('adminBtn').classList.toggle('hidden', !isAdmin);
+  document.getElementById('logoutBtn').classList.remove('hidden');
   var w=document.getElementById('welcomeLine');
-  w.textContent = 'नमस्ते, '+(ME.name||ME.userId)+' ('+ME.role+')';
+  w.textContent='Namaste, '+((d.user&&(d.user.name||d.user.userId))||'');
   w.classList.remove('hidden');
-
-  // pagara sections me nahi aata, alag bheja jaata hai — use features se nikaalo
-  var pagara=null;
-  (d.features||[]).forEach(function(f){ if (f.type==='pagara') pagara=f; });
-  renderSections(d.sections || []);
-  renderPagara(pagara);
+  renderSections(d.sections||[]);
+  renderPagara(d.pagara);
 }
-
 function applyBranding(d){
-  if(!d) return;
+  if(!d)return;
   if(d.companyName) document.getElementById('brandName').textContent=d.companyName;
   if(d.tagline) document.getElementById('brandTag').textContent=d.tagline;
 }
 
-/* ====== SECTIONS RENDER (categorized headings) ====== */
 function renderSections(sections){
-  var wrap = document.getElementById('sectionsWrap');
-  if(!sections || !sections.length){
-    wrap.innerHTML = '<section class="block"><div class="center">कोई लिंक उपलब्ध नहीं।</div></section>';
-    return;
-  }
-  var html = '';
-  sections.forEach(function(sec, si){
-    var bodyId = 'secbody_'+si;
-    var clickable = sec.collapsible ? ' clickable' : '';
-    var chev = sec.collapsible ? '<span class="chev" id="chev_'+si+'">&#9660;</span>' : '';
-    var onclick = sec.collapsible ? ' onclick="toggleSec('+si+')"' : '';
-
-    html += '<section class="block">';
-    if (sec.name){
-      html += '<div class="sec-head'+clickable+'"'+onclick+'>'+
-                '<h2 class="hi">'+esc(sec.name)+'</h2><span class="rule"></span>'+chev+'</div>';
-    }
-    html += '<div class="sec-body" id="'+bodyId+'">';
-
-    if (sec.type === 'text'){
-      // Text ya Sheet-embed
-      var txt = sec.text || '';
-      if (isEmbeddableUrl(txt)){
-        html += '<div class="embed-block"><iframe src="'+embedUrl(txt)+'" loading="lazy"></iframe></div>';
-      } else {
-        html += '<div class="text-block hi">'+esc(txt)+'</div>';
-      }
+  var wrap=document.getElementById('sectionsWrap');
+  if(!sections||!sections.length){ wrap.innerHTML='<section class="block"><div class="center">Koi link uplabdh nahi.</div></section>'; return; }
+  var html='';
+  sections.forEach(function(sec,si){
+    var clk=sec.collapsible?' clickable':'';
+    var chev=sec.collapsible?'<span class="chev" id="chev_'+si+'">&#9660;</span>':'';
+    var oc=sec.collapsible?' onclick="toggleSec('+si+')"':'';
+    html+='<section class="block">';
+    if(sec.name) html+='<div class="sec-head'+clk+'"'+oc+'><h2 class="hi">'+esc(sec.name)+'</h2><span class="rule"></span>'+chev+'</div>';
+    html+='<div class="sec-body" id="secbody_'+si+'">';
+    if(sec.type==='text'){
+      var txt=sec.text||'';
+      if(isEmbed(txt)) html+='<div class="embed-block"><iframe src="'+embedUrl(txt)+'" loading="lazy"></iframe></div>';
+      else html+='<div class="text-block hi">'+esc(txt)+'</div>';
     } else {
-      // Links: grid ya list
-      var links = sec.links || [];
-      var cls = (sec.view === 'list') ? 'list-view' : 'grid';
-      html += '<div class="'+cls+'">';
-      links.forEach(function(l){
-        html += '<a class="link-btn" href="'+l.link+'" target="_blank" rel="noopener">'+
-                  '<span class="link-name hi">'+esc(l.name)+'</span>'+
-                  '<span class="link-arrow">&rsaquo;</span></a>';
+      var cls=(sec.view==='list')?'list-view':'grid';
+      html+='<div class="'+cls+'">';
+      (sec.links||[]).forEach(function(l){
+        html+='<a class="link-btn" href="'+l.link+'" target="_blank" rel="noopener"><span class="link-name hi">'+esc(l.name)+'</span><span class="link-arrow">&rsaquo;</span></a>';
       });
-      html += '</div>';
+      html+='</div>';
     }
-    html += '</div></section>';
+    html+='</div></section>';
   });
-  wrap.innerHTML = html;
+  wrap.innerHTML=html;
 }
-
 function toggleSec(i){
-  var body = document.getElementById('secbody_'+i);
-  var chev = document.getElementById('chev_'+i);
-  if(!body) return;
-  if (body.classList.contains('collapsed')){
-    body.classList.remove('collapsed'); if(chev) chev.classList.remove('closed');
-  } else {
-    body.classList.add('collapsed'); if(chev) chev.classList.add('closed');
-  }
+  var b=document.getElementById('secbody_'+i); var c=document.getElementById('chev_'+i);
+  if(!b)return;
+  if(b.classList.contains('collapsed')){ b.classList.remove('collapsed'); if(c)c.classList.remove('closed'); }
+  else { b.classList.add('collapsed'); if(c)c.classList.add('closed'); }
 }
-
-// Google Sheet / Docs URL ko embed-yogya banao
-function isEmbeddableUrl(t){
-  t = String(t||'').trim();
-  return /^https?:\/\//i.test(t) && (t.indexOf('docs.google.com')!==-1 || t.indexOf('sheets')!==-1 || /\.(png|jpg|jpeg|gif|pdf)$/i.test(t) || t.indexOf('http')===0);
-}
+function isEmbed(t){ t=String(t||'').trim(); return /^https?:\/\//i.test(t); }
 function embedUrl(t){
-  t = String(t||'').trim();
-  // Google Sheet ko "preview/embed" roop me kholo
-  if (t.indexOf('docs.google.com/spreadsheets')!==-1){
-    // /edit ko /preview me badlo (embed ke liye behtar)
-    return t.replace(/\/edit.*$/, '/preview').replace(/\?.*$/,'') ;
-  }
+  t=String(t||'').trim();
+  if(t.indexOf('docs.google.com/spreadsheets')!==-1) return t.replace(/\/edit.*$/,'/preview').replace(/\?.*$/,'');
   return t;
 }
-
 function renderPagara(p){
   var sec=document.getElementById('pagaraSection');
   if(!p){ sec.style.display='none'; return; }
@@ -419,271 +273,42 @@ function renderPagara(p){
   btn.querySelector('h3').textContent=p.name||'Pagara In-Out System';
 }
 
-/* ============ LOGIN ============ */
 function openLogin(){ document.getElementById('loginOverlay').classList.remove('hidden'); document.getElementById('inUser').focus(); }
-function closeLogin(){ document.getElementById('loginOverlay').classList.add('hidden'); setMsg('loginMsg','',''); }
-function setMsg(id,text,type){ var m=document.getElementById(id); m.textContent=text; m.className='msg'+(type?(' '+type):''); }
+function closeLogin(){ document.getElementById('loginOverlay').classList.add('hidden'); setMsg(''); }
+function setMsg(t){ var m=document.getElementById('loginMsg'); m.textContent=t; m.className='msg'+(t?' err':''); }
 
 function doLogin(){
   var u=document.getElementById('inUser').value.trim();
   var p=document.getElementById('inPass').value;
-  if(!u||!p){ setMsg('loginMsg','यूज़र आईडी और पासवर्ड भरें।','err'); return; }
-  var btn=document.getElementById('loginSubmit'); btn.disabled=true; btn.textContent='जाँच हो रही है...';
-  api('login', { userId:u, password:p }, function(res){
+  if(!u||!p){ setMsg('User ID aur Password bharein.'); return; }
+  var btn=document.getElementById('loginSubmit'); btn.disabled=true; btn.textContent='Jaanch ho rahi hai...';
+  api('login',{userId:u,password:p},function(res){
     btn.disabled=false; btn.textContent='Login';
-    if(!res || !res.ok){ setMsg('loginMsg',(res&&res.msg)||'लॉगिन विफल।','err'); return; }
+    if(!res||!res.ok){ setMsg((res&&res.msg)||'Login vifal.'); return; }
     TOKEN=res.token; localStorage.setItem('st_token',TOKEN);
-    cacheSet('mydata', null);  // purana cache saaf, naya login ka data aayega
     closeLogin();
     document.getElementById('sectionsWrap').innerHTML='<section class="block"><div class="center"><span class="spin"></span></div></section>';
     loadApp();
   });
 }
 function doLogout(){
-  var oldToken = TOKEN;
-  localStorage.removeItem('st_token'); TOKEN=''; ME=null; PERMS=null;
-  cacheSet('mydata', null);  // logged-in cache hata do
+  var old=TOKEN;
+  localStorage.removeItem('st_token'); TOKEN='';
   document.getElementById('sectionsWrap').innerHTML='<section class="block"><div class="center"><span class="spin"></span></div></section>';
   loadApp();
-  api('logout', { token: oldToken }, function(){});
+  api('logout',{token:old},function(){});
 }
 
-/* ============ ADMIN ============ */
-function openAdmin(){ document.getElementById('adminOverlay').classList.remove('hidden'); adminTab('users'); }
-function closeAdmin(){ document.getElementById('adminOverlay').classList.add('hidden'); }
-function setActiveTab(name){ document.querySelectorAll('.admin-tabs button').forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-tab')===name); }); }
-function adminLoading(){ document.getElementById('adminBody').innerHTML='<div class="center"><span class="spin"></span></div>'; }
+function esc(s){ if(s===undefined||s===null)return''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function onFail(err){ var b=document.getElementById('sectionsWrap'); if(b) b.innerHTML='<section class="block"><div class="center">Data load nahi hua. Refresh karein.<br><small>'+((err&&err.msg)||'')+'</small></div></section>'; }
 
-function adminTab(name){
-  setActiveTab(name); adminLoading();
-  if(name==='users') api('adminGetUsers',{token:TOKEN},renderUsers);
-  if(name==='control') api('adminGetControl',{token:TOKEN},renderControl);
-  if(name==='headings') api('adminGetHeadings',{token:TOKEN},renderHeadings);
-  if(name==='settings') api('adminGetSettings',{token:TOKEN},renderSettings);
-  if(name==='logs') api('adminGetLogs',{token:TOKEN,limit:100},renderLogs);
-}
+window.onload=loadApp;
 
-function renderUsers(res){
-  if(!res || !res.ok){ adminErr(res); return; }
-  var rows=res.rows||[];
-  var h='<button class="mini add" onclick="userForm()">+ नया यूज़र</button>';
-  h+='<table><tr><th>UserID</th><th>Name</th><th>Role</th><th>Department</th><th>Features</th><th>Active</th><th></th></tr>';
-  rows.forEach(function(u){
-    h+='<tr><td>'+esc(u.UserID)+'</td><td>'+esc(u.Name)+'</td><td>'+esc(u.Role)+'</td><td>'+esc(u.Department)+'</td>'+
-       '<td>'+esc(u.Features)+'</td><td>'+esc(u.Active)+'</td>'+
-       '<td><button class="mini edit" onclick=\'userForm('+JSON.stringify(u).replace(/'/g,"&#39;")+')\'>Edit</button> '+
-       '<button class="mini del" onclick="userDel('+u._row+')">Del</button></td></tr>';
-  });
-  h+='</table>';
-  document.getElementById('adminBody').innerHTML=h;
-}
-function userForm(u){
-  u=u||{};
-  var roles=['MD','Admin','Employee'];
-  var roleOpts=roles.map(function(r){return '<option '+((u.Role===r)?'selected':'')+'>'+r+'</option>';}).join('');
-  var h='<h3 style="color:var(--maroon-light);margin-bottom:16px;">'+(u._row?'यूज़र एडिट करें':'नया यूज़र जोड़ें')+'</h3>';
-  h+='<div class="msg" id="uMsg"></div>';
-  h+=field('UserID','uUserID',u.UserID||'','text','नंबर या टेक्स्ट');
-  h+=field('Password','uPass',u.Password||'','text','पासवर्ड');
-  h+=field('Name','uName',u.Name||'','text','पूरा नाम');
-  h+='<div class="field"><label>Role</label><select id="uRole">'+roleOpts+'</select></div>';
-  h+=field('Department','uDept',u.Department||'','text','जैसे: Sales');
-  h+=field('Features (comma se, ya ALL)','uFeat',u.Features||'','text','जैसे: leave,inquiry या ALL');
-  h+='<div class="field"><label>Active</label><select id="uActive"><option '+((_yn(u.Active))?'selected':'')+' value="TRUE">Haan (चालू)</option><option '+((!_yn(u.Active)&&u._row)?'selected':'')+' value="FALSE">Nahi (बंद)</option></select></div>';
-  h+='<button class="btn-primary" onclick=\'userSave('+(u._row||0)+')\'>Save</button> ';
-  h+='<button class="mini" style="background:#ddd;margin-top:8px;" onclick="adminTab(\'users\')">Cancel</button>';
-  document.getElementById('adminBody').innerHTML=h;
-}
-function userSave(row){
-  var user={ UserID:val('uUserID'), Password:val('uPass'), Name:val('uName'), Role:val('uRole'), Department:val('uDept'), Features:val('uFeat'), Active:val('uActive') };
-  if(row) user._row=row;
-  if(!user.UserID||!user.Password){ document.getElementById('uMsg').className='msg err'; document.getElementById('uMsg').textContent='UserID aur Password zaroori hain.'; return; }
-  api('adminSaveUser', { token:TOKEN, user:user }, function(r){
-    if(!r || !r.ok){ document.getElementById('uMsg').className='msg err'; document.getElementById('uMsg').textContent=(r&&r.msg)||'Error'; return; }
-    adminTab('users');
-  });
-}
-function userDel(row){
-  if(!confirm('Pakka is user ko hataana hai?')) return;
-  api('adminDeleteUser', { token:TOKEN, rowNum:row }, function(){ adminTab('users'); });
-}
-
-function renderControl(res){
-  if(!res || !res.ok){ adminErr(res); return; }
-  var rows=res.rows||[];
-  var h='<button class="mini add" onclick="ctrlForm()">+ नया लिंक / फ़ीचर</button>';
-  h+='<table><tr><th>FeatureID</th><th>Type</th><th>Name</th><th>Heading</th><th>Show</th><th>Order</th><th></th></tr>';
-  rows.forEach(function(c){
-    h+='<tr><td>'+esc(c.FeatureID)+'</td><td>'+esc(c.Type)+'</td><td>'+esc(c.Name)+'</td>'+
-       '<td>'+esc(c.HeadingID||'')+'</td>'+
-       '<td>'+esc(c.Show)+'</td><td>'+esc(c.Order)+'</td>'+
-       '<td><button class="mini edit" onclick=\'ctrlForm('+JSON.stringify(c).replace(/'/g,"&#39;")+')\'>Edit</button> '+
-       '<button class="mini del" onclick="ctrlDel('+c._row+')">Del</button></td></tr>';
-  });
-  h+='</table>';
-  document.getElementById('adminBody').innerHTML=h;
-}
-function ctrlForm(c){
-  c=c||{};
-  // headings list laao dropdown ke liye
-  api('adminGetHeadings',{token:TOKEN},function(hres){
-    var hopts='<option value="">— koi nahi (Quick Links) —</option>';
-    if(hres && hres.ok){ (hres.rows||[]).forEach(function(hd){
-      var id=String(hd.HeadingID||'').trim();
-      if(!id) return;
-      hopts+='<option value="'+esc(id)+'" '+((String(c.HeadingID||'')===id)?'selected':'')+'>'+esc(hd.HeadingName||id)+' ('+esc(id)+')</option>';
-    });}
-    var types=['form','link','pagara'];
-    var typeOpts=types.map(function(t){return '<option '+((String(c.Type).toLowerCase()===t)?'selected':'')+'>'+t+'</option>';}).join('');
-    var h='<h3 style="color:var(--maroon-light);margin-bottom:16px;">'+(c._row?'लिंक एडिट करें':'नया लिंक जोड़ें')+'</h3>';
-    h+='<div class="msg" id="cMsg"></div>';
-    h+=field('FeatureID (unique, English)','cFid',c.FeatureID||'','text','जैसे: leave, inquiry');
-    h+='<div class="field"><label>Type</label><select id="cType">'+typeOpts+'</select></div>';
-    h+=field('Name (जो दिखेगा)','cName',c.Name||'','text','जैसे: लीव फॉर्म');
-    h+=field('Link (URL)','cLink',c.Link||'','text','https://...');
-    h+='<div class="field"><label>Heading (kis category me dikhe?)</label><select id="cHead">'+hopts+'</select></div>';
-    h+='<div class="field"><label>Show (dikhe?)</label><select id="cShow"><option '+((_yn(c.Show))?'selected':'')+' value="TRUE">Haan</option><option '+((!_yn(c.Show)&&c._row)?'selected':'')+' value="FALSE">Nahi</option></select></div>';
-    h+=field('Order (kram number)','cOrder',c.Order||'','text','जैसे: 1,2,3');
-    h+='<button class="btn-primary" onclick=\'ctrlSave('+(c._row||0)+')\'>Save</button> ';
-    h+='<button class="mini" style="background:#ddd;margin-top:8px;" onclick="adminTab(\'control\')">Cancel</button>';
-    document.getElementById('adminBody').innerHTML=h;
-  });
-}
-function ctrlSave(row){
-  var item={ FeatureID:val('cFid'), Type:val('cType'), Name:val('cName'), Link:val('cLink'), HeadingID:val('cHead'), Show:val('cShow'), Order:val('cOrder') };
-  if(row) item._row=row;
-  if(!item.Name||!item.Link){ document.getElementById('cMsg').className='msg err'; document.getElementById('cMsg').textContent='Name aur Link zaroori hain.'; return; }
-  api('adminSaveControl', { token:TOKEN, item:item }, function(r){
-    if(!r || !r.ok){ document.getElementById('cMsg').className='msg err'; document.getElementById('cMsg').textContent=(r&&r.msg)||'Error'; return; }
-    adminTab('control');
-  });
-}
-function ctrlDel(row){
-  if(!confirm('Pakka is link ko hataana hai?')) return;
-  api('adminDeleteControl', { token:TOKEN, rowNum:row }, function(){ adminTab('control'); });
-}
-
-/* ---- HEADINGS (categories) ---- */
-function renderHeadings(res){
-  if(!res || !res.ok){ adminErr(res); return; }
-  var rows=res.rows||[];
-  var h='<button class="mini add" onclick="headForm()">+ नई Heading</button>';
-  h+='<table><tr><th>ID</th><th>Name</th><th>Order</th><th>Show</th><th>View</th><th>Collapse</th><th>Type</th><th></th></tr>';
-  rows.forEach(function(c){
-    h+='<tr><td>'+esc(c.HeadingID)+'</td><td>'+esc(c.HeadingName)+'</td><td>'+esc(c.HeadingOrder)+'</td>'+
-       '<td>'+esc(c.Show)+'</td><td>'+esc(c.View)+'</td><td>'+esc(c.Collapsible)+'</td><td>'+esc(c.Type)+'</td>'+
-       '<td><button class="mini edit" onclick=\'headForm('+JSON.stringify(c).replace(/'/g,"&#39;")+')\'>Edit</button> '+
-       '<button class="mini del" onclick="headDel('+c._row+')">Del</button></td></tr>';
-  });
-  h+='</table><p style="margin-top:12px;font-size:.82rem;color:var(--maroon-lighter);">Type <b>text</b> hai to "Text" column me likha content (ya Google Sheet link) heading ke neeche dikhega.</p>';
-  document.getElementById('adminBody').innerHTML=h;
-}
-function headForm(c){
-  c=c||{};
-  var views=['grid','list'];
-  var viewOpts=views.map(function(t){return '<option '+((String(c.View||'grid').toLowerCase()===t)?'selected':'')+'>'+t+'</option>';}).join('');
-  var types=['links','text'];
-  var typeOpts=types.map(function(t){return '<option '+((String(c.Type||'links').toLowerCase()===t)?'selected':'')+'>'+t+'</option>';}).join('');
-  var h='<h3 style="color:var(--maroon-light);margin-bottom:16px;">'+(c._row?'Heading एडिट करें':'नई Heading जोड़ें')+'</h3>';
-  h+='<div class="msg" id="hMsg"></div>';
-  h+=field('Heading ID (unique, English)','hId',c.HeadingID||'','text','जैसे: daily, stock, hr');
-  h+=field('Heading Name (जो दिखेगा)','hName',c.HeadingName||'','text','जैसे: दैनिक फॉर्म');
-  h+=field('Order (kram)','hOrder',c.HeadingOrder||'','text','1,2,3...');
-  h+='<div class="field"><label>Show (dikhe?)</label><select id="hShow"><option '+((_yn(c.Show))?'selected':'')+' value="TRUE">Haan</option><option '+((!_yn(c.Show)&&c._row)?'selected':'')+' value="FALSE">Nahi</option></select></div>';
-  h+='<div class="field"><label>View</label><select id="hView">'+viewOpts+'</select></div>';
-  h+='<div class="field"><label>Collapsible (khul-band ho sake?)</label><select id="hColl"><option '+((_yn(c.Collapsible))?'selected':'')+' value="TRUE">Haan</option><option '+((!_yn(c.Collapsible)&&c._row)?'selected':'')+' value="FALSE">Nahi</option></select></div>';
-  h+='<div class="field"><label>Type</label><select id="hType">'+typeOpts+'</select></div>';
-  h+='<div class="field"><label>Text (agar Type=text: likha content YA Google Sheet link)</label><textarea id="hText" style="width:100%;min-height:80px;padding:12px;border:1px solid var(--line);border-radius:10px;font-family:inherit;">'+esc(c.Text||'')+'</textarea></div>';
-  h+='<button class="btn-primary" onclick=\'headSave('+(c._row||0)+')\'>Save</button> ';
-  h+='<button class="mini" style="background:#ddd;margin-top:8px;" onclick="adminTab(\'headings\')">Cancel</button>';
-  document.getElementById('adminBody').innerHTML=h;
-}
-function headSave(row){
-  var item={ HeadingID:val('hId'), HeadingName:val('hName'), HeadingOrder:val('hOrder'), Show:val('hShow'), View:val('hView'), Collapsible:val('hColl'), Type:val('hType'), Text:document.getElementById('hText').value };
-  if(row) item._row=row;
-  if(!item.HeadingID||!item.HeadingName){ document.getElementById('hMsg').className='msg err'; document.getElementById('hMsg').textContent='Heading ID aur Name zaroori hain.'; return; }
-  api('adminSaveHeading', { token:TOKEN, item:item }, function(r){
-    if(!r || !r.ok){ document.getElementById('hMsg').className='msg err'; document.getElementById('hMsg').textContent=(r&&r.msg)||'Error'; return; }
-    adminTab('headings');
-  });
-}
-function headDel(row){
-  if(!confirm('Pakka is heading ko hataana hai?')) return;
-  api('adminDeleteHeading', { token:TOKEN, rowNum:row }, function(){ adminTab('headings'); });
-}
-
-function renderSettings(res){
-  if(!res || !res.ok){ adminErr(res); return; }
-  var rows=res.rows||[];
-  var h='<table><tr><th>Setting</th><th>Value</th><th></th></tr>';
-  rows.forEach(function(s){
-    h+='<tr><td>'+esc(s.Key)+'</td>'+
-       '<td><input id="set_'+esc(s.Key)+'" value="'+esc(s.Value)+'" style="width:100%;padding:8px;border:1px solid var(--line);border-radius:6px;"></td>'+
-       '<td><button class="mini edit" onclick="setSave(\''+esc(s.Key)+'\')">Save</button></td></tr>';
-  });
-  h+='</table><p style="margin-top:14px;font-size:.82rem;color:var(--maroon-lighter);">Tip: <b>show_login</b> ko TRUE karke login button sabko dikhega.</p>';
-  document.getElementById('adminBody').innerHTML=h;
-}
-function setSave(key){
-  var v=document.getElementById('set_'+key).value;
-  api('adminSaveSetting', { token:TOKEN, key:key, value:v }, function(){ toast('Saved: '+key); });
-}
-
-function renderLogs(res){
-  if(!res || !res.ok){ adminErr(res); return; }
-  var rows=res.rows||[];
-  var h='<table><tr><th>Time</th><th>UserID</th><th>Action</th><th>Detail</th></tr>';
-  rows.forEach(function(l){
-    h+='<tr><td>'+esc(fmtDate(l.Time))+'</td><td>'+esc(l.UserID)+'</td><td>'+esc(l.Action)+'</td><td>'+esc(l.Detail)+'</td></tr>';
-  });
-  h+='</table>';
-  document.getElementById('adminBody').innerHTML=h;
-}
-
-/* ============ UTIL ============ */
-function field(label,id,value,type,ph){ return '<div class="field"><label>'+label+'</label><input id="'+id+'" type="'+(type||'text')+'" value="'+esc(value)+'" placeholder="'+(ph||'')+'"></div>'; }
-function val(id){ var e=document.getElementById(id); return e?String(e.value).trim():''; }
-function esc(s){ if(s===undefined||s===null) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
-function _yn(v){ var s=String(v).trim().toLowerCase(); return s==='true'||s==='1'||s==='yes'||s==='haan'; }
-function fmtDate(d){ try{ return new Date(d).toLocaleString('en-IN'); }catch(e){ return d; } }
-function adminErr(res){
-  if(res&&res.expired){ localStorage.removeItem('st_token'); location.reload(); return; }
-  document.getElementById('adminBody').innerHTML='<div class="center">'+((res&&res.msg)||'Error')+'</div>';
-}
-function toast(t){
-  var d=document.createElement('div');
-  d.textContent=t;
-  d.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--maroon-dark);color:var(--gold-light);padding:12px 22px;border-radius:10px;z-index:200;font-size:.9rem;box-shadow:0 6px 20px rgba(0,0,0,.3);';
-  document.body.appendChild(d); setTimeout(function(){d.remove();},2000);
-}
-function onFail(err){
-  var box=document.getElementById('sectionsWrap');
-  if(box) box.innerHTML='<div class="center">डेटा लोड नहीं हुआ। पेज रिफ्रेश करें।<br><small>'+((err&&err.msg)||'')+'</small></div>';
-}
-
-/* ============ PWA service worker ============ */
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function(){
-    navigator.serviceWorker.register('sw.js').then(function(reg){
-      // naya version aaye to purana chhod kar naya activate karo
-      reg.addEventListener('updatefound', function(){
-        var nw = reg.installing;
-        if (!nw) return;
-        nw.addEventListener('statechange', function(){
-          if (nw.state === 'installed' && navigator.serviceWorker.controller) {
-            // naya SW taiyaar -> ek baar page refresh (white screen se bachne ke liye)
-            nw.postMessage && nw.postMessage('skipWaiting');
-          }
-        });
-      });
-    }).catch(function(){});
-    // jab naya SW control le, ek baar reload
-    var refreshed = false;
-    navigator.serviceWorker.addEventListener('controllerchange', function(){
-      if (refreshed) return; refreshed = true;
-      location.reload();
-    });
-  });
+// Service worker
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').then(function(reg){
+    reg.addEventListener('updatefound',function(){ var nw=reg.installing; if(nw) nw.addEventListener('statechange',function(){ if(nw.state==='installed'&&navigator.serviceWorker.controller) location.reload(); }); });
+  }).catch(function(){});
 }
 </script>
 </body>
