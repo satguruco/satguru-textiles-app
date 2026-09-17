@@ -2,7 +2,7 @@
    Fix: "network-first" — hamesha nayi file laata hai, cache sirf backup.
    Isse white-screen / purani file wali dikkat khatam. */
 
-var CACHE = 'satguru-v4';
+var CACHE = 'satguru-v5';
 var ASSETS = [
   './',
   './index.html',
